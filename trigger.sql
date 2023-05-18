@@ -1,16 +1,12 @@
 DELIMITER $$
 
-CREATE OR REPLACE TRIGGER prevent_employees_day BEFORE
-    INSERT
-    ON employees
-    FOR EACH ROW
+CREATE TRIGGER prevent_employees_day BEFORE INSERT ON employees
 
-    DECLARE
-    current_day DATE := TRUNC(SYSDATE); -- pega o dia atual
-
+	FOR EACH ROW
     BEGIN
-
-    IF date_format(current_day, '%a') IN ('Sat','Sun','Mon') THEN -- aplicar correções de dia??
+	DECLARE current_day VARCHAR(3);
+    SET current_day = date_format(CURRENT_DATE, '%a'); -- pega o dia atual
+    IF current_day IN ('Sat','Sun','Mon') THEN -- aplicar correções de dia??
 
     SIGNAL SQLSTATE '45000'
     SET MESSAGE_TEXT = 'Você não pode realizar alterações na tabela employees durante este dia!';
