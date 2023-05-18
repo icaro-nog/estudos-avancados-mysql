@@ -1,7 +1,7 @@
 DELIMITER $$
 
 CREATE OR REPLACE TRIGGER prevent_employees_day BEFORE
-    INSERT or UPDATE or DELETE 
+    INSERT
     ON employees
     FOR EACH ROW
 
@@ -10,7 +10,7 @@ CREATE OR REPLACE TRIGGER prevent_employees_day BEFORE
 
     BEGIN
 
-    IF date_format(current_day, '%a') IN ('Wed','Sun','Mon') THEN -- aplicar correções de dia??
+    IF date_format(current_day, '%a') IN ('Sat','Sun','Mon') THEN -- aplicar correções de dia??
 
     SIGNAL SQLSTATE '45000'
     SET MESSAGE_TEXT = 'Você não pode realizar alterações na tabela employees durante este dia!';
